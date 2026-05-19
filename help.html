@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Help Desk & Support Center</title>
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+scroll-behavior:smooth;
+}
+
+body{
+min-height:100vh;
+overflow-x:hidden;
+background:
+linear-gradient(rgba(7,12,30,0.92),rgba(15,30,70,0.92)),
+url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3") center/cover no-repeat fixed;
+color:white;
+}
+
+/* ANIMATED BG */
+body::before{
+content:"";
+position:fixed;
+width:500px;
+height:500px;
+background:rgba(59,130,246,0.25);
+filter:blur(120px);
+top:-100px;
+left:-100px;
+animation:move1 10s infinite alternate;
+z-index:-1;
+}
+
+body::after{
+content:"";
+position:fixed;
+width:450px;
+height:450px;
+background:rgba(168,85,247,0.25);
+filter:blur(120px);
+bottom:-100px;
+right:-100px;
+animation:move2 10s infinite alternate;
+z-index:-1;
+}
+
+@keyframes move1{
+from{transform:translate(0,0);}
+to{transform:translate(80px,60px);}
+}
+
+@keyframes move2{
+from{transform:translate(0,0);}
+to{transform:translate(-80px,-60px);}
+}
+
+/* NAVBAR */
+
+nav{
+position:sticky;
+top:0;
+z-index:100;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:24px;
+font-weight:700;
+color:#fff;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+margin:0 8px;
+padding:10px 15px;
+border-radius:10px;
+transition:0.3s;
+font-size:14px;
+}
+
+.nav-links a:hover{
+background:white;
+color:#111827;
+}
+
+/* HERO */
+
+.hero{
+padding:70px 20px 40px;
+text-align:center;
+animation:fadeIn 1s ease;
+}
+
+.hero h1{
+font-size:52px;
+margin-bottom:10px;
+background:linear-gradient(to right,#60a5fa,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+max-width:850px;
+margin:auto;
+line-height:1.8;
+font-size:17px;
+opacity:0.9;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* SEARCH */
+
+.search-box{
+display:flex;
+justify-content:center;
+margin-top:30px;
+}
+
+.search-box input{
+width:420px;
+padding:15px;
+border:none;
+border-radius:15px;
+outline:none;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(10px);
+color:white;
+font-size:15px;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.search-box input::placeholder{
+color:#ddd;
+}
+
+/* STATS */
+
+.stats{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+margin:35px 20px;
+}
+
+.stat-card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(15px);
+padding:20px;
+border-radius:18px;
+width:180px;
+text-align:center;
+transition:0.4s;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 8px 25px rgba(0,0,0,0.25);
+}
+
+.stat-card:hover{
+transform:translateY(-8px) scale(1.03);
+}
+
+.stat-card h2{
+font-size:35px;
+margin-bottom:5px;
+}
+
+/* CATEGORY */
+
+.categories{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin:20px;
+}
+
+.cat{
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+background:rgba(255,255,255,0.12);
+transition:0.3s;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.cat:hover,
+.cat.active{
+background:white;
+color:#111827;
+transform:translateY(-3px);
+}
+
+/* FAQ */
+
+.faq{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+.item{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+border-radius:16px;
+margin-bottom:18px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.08);
+transition:0.4s;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.item:hover{
+transform:translateY(-4px);
+}
+
+.q{
+padding:18px 22px;
+font-size:17px;
+font-weight:600;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.a{
+display:none;
+padding:22px;
+background:rgba(0,0,0,0.25);
+line-height:1.9;
+font-size:15px;
+animation:fadeAnswer 0.4s ease;
+}
+
+@keyframes fadeAnswer{
+from{
+opacity:0;
+transform:translateY(-10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* STEP BOX */
+
+.step{
+background:rgba(255,255,255,0.08);
+padding:12px;
+border-left:4px solid #60a5fa;
+border-radius:10px;
+margin:12px 0;
+}
+
+/* TICKET SECTION */
+
+.ticket{
+max-width:900px;
+margin:40px auto;
+padding:25px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(14px);
+border-radius:20px;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 8px 25px rgba(0,0,0,0.2);
+}
+
+.ticket h2{
+margin-bottom:20px;
+}
+
+.ticket input,
+.ticket textarea{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+outline:none;
+border-radius:12px;
+background:rgba(255,255,255,0.12);
+color:white;
+font-size:15px;
+}
+
+.ticket textarea{
+height:120px;
+resize:none;
+}
+
+.ticket button{
+padding:14px 20px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#3b82f6,#8b5cf6);
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:0.4s;
+}
+
+.ticket button:hover{
+transform:scale(1.05);
+}
+
+/* TICKET LIST */
+
+.ticket-list{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.ticket-card{
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:16px;
+margin-bottom:15px;
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.ticket-card h3{
+margin-bottom:10px;
+}
+
+.ticket-card p{
+line-height:1.7;
+opacity:0.9;
+}
+
+.badge{
+display:inline-block;
+padding:7px 12px;
+border-radius:10px;
+margin-top:10px;
+font-size:12px;
+font-weight:600;
+background:#f59e0b;
+}
+
+.progress{
+background:#3b82f6;
+}
+
+.resolved{
+background:#22c55e;
+}
+
+.actions{
+margin-top:15px;
+}
+
+.actions button{
+padding:8px 12px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+margin-right:8px;
+font-size:13px;
+}
+
+.next{
+background:#111827;
+color:white;
+}
+
+.delete{
+background:#ef4444;
+color:white;
+}
+
+/* FOOTER */
+
+footer{
+margin-top:40px;
+text-align:center;
+padding:20px;
+background:rgba(0,0,0,0.4);
+font-size:14px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:34px;
+}
+
+.search-box input{
+width:90%;
+}
+
+nav{
+flex-direction:column;
+gap:10px;
+}
+
+.nav-links{
+text-align:center;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+
+<div class="logo">📦 Inventory Help Desk</div>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="dashboard.html">Dashboard</a>
+<a href="settings.html">Settings</a>
+</div>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>Professional AI Help & Support Center</h1>
+
+<p>
+Get complete step-by-step solutions for inventory management problems,
+login issues, dashboard usage, stock handling, reports, settings,
+backup systems and much more.
+</p>
+
+<div class="search-box">
+<input type="text" id="search" onkeyup="searchFAQ()" placeholder="🔍 Search help topics...">
+</div>
+
+</section>
+
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="pendingCount">0</h2>
+<p>Pending</p>
+</div>
+
+<div class="stat-card">
+<h2 id="progressCount">0</h2>
+<p>In Progress</p>
+</div>
+
+<div class="stat-card">
+<h2 id="resolvedCount">0</h2>
+<p>Resolved</p>
+</div>
+
+</div>
+
+<!-- CATEGORIES -->
+
+<div class="categories">
+
+<div class="cat active" onclick="filterCat('all',event)">All</div>
+<div class="cat" onclick="filterCat('login',event)">Login</div>
+<div class="cat" onclick="filterCat('inventory',event)">Inventory</div>
+<div class="cat" onclick="filterCat('settings',event)">Settings</div>
+<div class="cat" onclick="filterCat('dashboard',event)">Dashboard</div>
+
+</div>
+
+<!-- FAQ -->
+
+<div class="faq" id="faqBox">
+
+<!-- FAQ 1 -->
+
+<div class="item" data-cat="login">
+
+<div class="q" onclick="toggleFAQ(this)">
+🔐 How to Login into Inventory System?
+<span>+</span>
+</div>
+
+<div class="a">
+
+<div class="step">
+<b>Step 1:</b> Open the Login Page from the navbar.
+</div>
+
+<div class="step">
+<b>Step 2:</b> Enter your registered email or username.
+</div>
+
+<div class="step">
+<b>Step 3:</b> Type your password carefully.
+</div>
+
+<div class="step">
+<b>Step 4:</b> Click on the Login button.
+</div>
+
+<div class="step">
+<b>Step 5:</b> If login is successful, session storage activates automatically and redirects you to Dashboard.
+</div>
+
+<div class="step">
+<b>Troubleshooting:</b>
+If password is incorrect, reset your credentials from Settings or contact administrator support.
+</div>
+
+</div>
+
+</div>
+
+<!-- FAQ 2 -->
+
+<div class="item" data-cat="inventory">
+
+<div class="q" onclick="toggleFAQ(this)">
+📦 How to Add Inventory Product?
+<span>+</span>
+</div>
+
+<div class="a">
+
+<div class="step">
+<b>Step 1:</b> Go to Inventory Page.
+</div>
+
+<div class="step">
+<b>Step 2:</b> Click on "Add Product".
+</div>
+
+<div class="step">
+<b>Step 3:</b> Enter Product Name, Quantity, Price and Category.
+</div>
+
+<div class="step">
+<b>Step 4:</b> Upload product image if required.
+</div>
+
+<div class="step">
+<b>Step 5:</b> Click Save Product.
+</div>
+
+<div class="step">
+<b>Result:</b> Product instantly appears in inventory table and history logs.
+</div>
+
+</div>
+
+</div>
+
+<!-- FAQ 3 -->
+
+<div class="item" data-cat="dashboard">
+
+<div class="q" onclick="toggleFAQ(this)">
+📊 How Dashboard Analytics Work?
+<span>+</span>
+</div>
+
+<div class="a">
+
+<div class="step">
+<b>Step 1:</b> Dashboard fetches inventory data from localStorage/database.
+</div>
+
+<div class="step">
+<b>Step 2:</b> Total items, low stock and sales analytics are calculated.
+</div>
+
+<div class="step">
+<b>Step 3:</b> Graphs and cards update automatically.
+</div>
+
+<div class="step">
+<b>Step 4:</b> Recent activities appear in Activity History section.
+</div>
+
+<div class="step">
+<b>Professional Tip:</b>
+Use charts and category filters for faster stock analysis.
+</div>
+
+</div>
+
+</div>
+
+<!-- FAQ 4 -->
+
+<div class="item" data-cat="settings">
+
+<div class="q" onclick="toggleFAQ(this)">
+⚙ How to Enable Dark Mode?
+<span>+</span>
+</div>
+
+<div class="a">
+
+<div class="step">
+<b>Step 1:</b> Open Settings Page.
+</div>
+
+<div class="step">
+<b>Step 2:</b> Click on Theme Toggle.
+</div>
+
+<div class="step">
+<b>Step 3:</b> Dark mode gets saved permanently using localStorage.
+</div>
+
+<div class="step">
+<b>Step 4:</b> Reload page to verify settings persistence.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TICKET -->
+
+<div class="ticket">
+
+<h2>🎫 Raise Support Ticket</h2>
+
+<input type="text" id="name" placeholder="Enter Your Name">
+
+<textarea id="msg" placeholder="Describe your issue in detail..."></textarea>
+
+<button onclick="addTicket()">Submit Ticket</button>
+
+</div>
+
+<!-- TICKET LIST -->
+
+<div class="ticket-list">
+
+<h2 style="margin-bottom:20px;">📩 Support Tickets</h2>
+
+<div id="ticketList"></div>
+
+</div>
+
+<footer>
+© 2026 Professional Inventory Help Desk System
+</footer>
+
+<script>
+
+let tickets = JSON.parse(localStorage.getItem("tickets") || "[]");
+let currentFilter = "all";
+
+/* FAQ TOGGLE */
+
+function toggleFAQ(el){
+
+let ans = el.nextElementSibling;
+
+document.querySelectorAll(".a").forEach(a=>{
+
+if(a !== ans){
+a.style.display = "none";
+a.previousElementSibling.querySelector("span").innerText = "+";
+}
+
+});
+
+if(ans.style.display === "block"){
+ans.style.display = "none";
+el.querySelector("span").innerText = "+";
+}else{
+ans.style.display = "block";
+el.querySelector("span").innerText = "-";
+}
+
+}
+
+/* SEARCH */
+
+function searchFAQ(){
+
+let val = document.getElementById("search").value.toLowerCase();
+
+document.querySelectorAll(".item").forEach(item=>{
+
+let text = item.innerText.toLowerCase();
+
+item.style.display = text.includes(val) ? "block" : "none";
+
+});
+
+}
+
+/* FILTER */
+
+function filterCat(cat,event){
+
+currentFilter = cat;
+
+document.querySelectorAll(".cat").forEach(c=>{
+c.classList.remove("active");
+});
+
+event.target.classList.add("active");
+
+document.querySelectorAll(".item").forEach(item=>{
+
+if(cat === "all" || item.dataset.cat === cat){
+item.style.display = "block";
+}else{
+item.style.display = "none";
+}
+
+});
+
+}
+
+/* ADD TICKET */
+
+function addTicket(){
+
+let name = document.getElementById("name").value;
+let msg = document.getElementById("msg").value;
+
+if(!name || !msg){
+alert("Please fill all fields");
+return;
+}
+
+tickets.push({
+name,
+msg,
+status:"Pending",
+time:new Date().toLocaleString()
+});
+
+saveTickets();
+
+document.getElementById("name").value = "";
+document.getElementById("msg").value = "";
+
+renderTickets();
+
+}
+
+/* SAVE */
+
+function saveTickets(){
+localStorage.setItem("tickets",JSON.stringify(tickets));
+}
+
+/* NEXT STATUS */
+
+function nextStatus(i){
+
+if(tickets[i].status === "Pending"){
+tickets[i].status = "In Progress";
+}
+else if(tickets[i].status === "In Progress"){
+tickets[i].status = "Resolved";
+}
+
+saveTickets();
+renderTickets();
+
+}
+
+/* DELETE */
+
+function deleteTicket(i){
+
+if(confirm("Delete this ticket?")){
+
+tickets.splice(i,1);
+
+saveTickets();
+
+renderTickets();
+
+}
+
+}
+
+/* UPDATE STATS */
+
+function updateStats(){
+
+document.getElementById("pendingCount").innerText =
+tickets.filter(t=>t.status==="Pending").length;
+
+document.getElementById("progressCount").innerText =
+tickets.filter(t=>t.status==="In Progress").length;
+
+document.getElementById("resolvedCount").innerText =
+tickets.filter(t=>t.status==="Resolved").length;
+
+}
+
+/* RENDER */
+
+function renderTickets(){
+
+updateStats();
+
+let box = document.getElementById("ticketList");
+
+if(tickets.length === 0){
+
+box.innerHTML = `
+<div class="ticket-card">
+No tickets submitted yet
+</div>
+`;
+
+return;
+
+}
+
+box.innerHTML = tickets.map((t,i)=>{
+
+let cls = "";
+
+if(t.status === "In Progress"){
+cls = "progress";
+}
+
+if(t.status === "Resolved"){
+cls = "resolved";
+}
+
+return `
+
+<div class="ticket-card">
+
+<h3>👤 ${t.name}</h3>
+
+<p>${t.msg}</p>
+
+<small>${t.time}</small>
+
+<br>
+
+<span class="badge ${cls}">
+${t.status}
+</span>
+
+<div class="actions">
+
+<button class="next" onclick="nextStatus(${i})">
+Next Status
+</button>
+
+<button class="delete" onclick="deleteTicket(${i})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+renderTickets();
+
+</script>
+
+</body>
+</html>

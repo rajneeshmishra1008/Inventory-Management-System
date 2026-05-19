@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Pro Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+display:flex;
+min-height:100vh;
+background:
+linear-gradient(135deg, rgba(0,0,0,0.85), rgba(10,15,30,0.95)),
+url("https://images.unsplash.com/photo-1581090700227-1e8f0c2c8a42");
+background-size:cover;
+background-position:center;
+color:white;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:260px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+padding:20px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+
+.profile{
+text-align:center;
+margin-bottom:20px;
+}
+
+.profile img{
+width:80px;
+height:80px;
+border-radius:50%;
+border:2px solid white;
+}
+
+.profile h3{
+margin-top:10px;
+}
+
+.menu button{
+width:100%;
+padding:10px;
+margin:6px 0;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:rgba(255,255,255,0.12);
+color:white;
+transition:0.3s;
+}
+
+.menu button:hover{
+background:white;
+color:black;
+}
+
+.logout{
+background:#ef4444 !important;
+}
+
+/* MAIN */
+.main{
+flex:1;
+padding:20px;
+overflow:auto;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.header h2{
+font-size:24px;
+}
+
+/* CARDS */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(12px);
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+/* INPUTS */
+.form{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:10px;
+margin-bottom:10px;
+}
+
+input{
+padding:10px;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+/* BUTTON */
+.btn{
+padding:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#22c55e,#16a34a);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+background:rgba(255,255,255,0.08);
+border-radius:12px;
+overflow:hidden;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+th{
+background:rgba(255,255,255,0.15);
+}
+
+/* ACTION */
+.action button{
+padding:6px 10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:2px;
+}
+
+.edit{background:#facc15;}
+.del{background:#ef4444;color:white;}
+
+.section{display:none;}
+.active{display:block;}
+
+@media(max-width:768px){
+.sidebar{display:none;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div>
+
+<div class="profile">
+<img id="img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+<h3 id="username">User</h3>
+<small id="role">Role</small>
+</div>
+
+<div class="menu">
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('add')">Add Product</button>
+<button onclick="show('inventory')">Inventory</button>
+<button class="logout" onclick="logout()">Logout</button>
+</div>
+
+</div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="header">
+<h2>📦 Inventory Dashboard</h2>
+</div>
+
+<!-- STATS -->
+<div class="cards">
+<div class="card">📦<h3 id="total">0</h3><p>Total Products</p></div>
+<div class="card">⚠️<h3 id="low">0</h3><p>Low Stock</p></div>
+<div class="card">📊<h3 id="stock">0</h3><p>Total Quantity</p></div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="section active">
+<p>Welcome <b id="nameTop"></b> 👋 Manage your inventory below.</p>
+</div>
+
+<!-- ADD -->
+<div id="add" class="section">
+
+<div class="form">
+<input id="pname" placeholder="Product Name">
+<input id="price" placeholder="Price">
+<input id="qty" placeholder="Quantity">
+</div>
+
+<button class="btn" onclick="add()">Add Product</button>
+
+</div>
+
+<!-- INVENTORY -->
+<div id="inventory" class="section">
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="table"></tbody>
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+/* ===== USER INFO ===== */
+let user = localStorage.getItem("activeUser") || "User";
+let role = localStorage.getItem("activeRole") || "User";
+
+document.getElementById("username").innerText = user;
+document.getElementById("role").innerText = role;
+document.getElementById("nameTop").innerText = user;
+
+/* PROFILE IMAGE */
+let img = localStorage.getItem("profileImage");
+if(img) document.getElementById("img").src = img;
+
+/* ===== DATA ===== */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function save(){
+localStorage.setItem("products",JSON.stringify(products));
+render();
+stats();
+}
+
+/* ===== STATS ===== */
+function stats(){
+document.getElementById("total").innerText = products.length;
+
+document.getElementById("stock").innerText =
+products.reduce((a,b)=>a + Number(b.qty),0);
+
+document.getElementById("low").innerText =
+products.filter(p=>Number(p.qty)<=5).length;
+}
+
+/* ===== ADD ===== */
+function add(){
+
+let n=pname.value;
+let p=price.value;
+let q=qty.value;
+
+if(!n||!p||!q){
+alert("Fill all fields");
+return;
+}
+
+products.push({name:n,price:p,qty:q});
+save();
+
+pname.value=price.value=qty.value="";
+}
+
+/* ===== RENDER ===== */
+function render(){
+
+let t=document.getElementById("table");
+t.innerHTML="";
+
+products.forEach((p,i)=>{
+
+t.innerHTML+=`
+<tr>
+<td>${p.name}</td>
+<td>₹${p.price}</td>
+<td>${p.qty}</td>
+<td>
+<button class="edit" onclick="edit(${i})">Edit</button>
+<button class="del" onclick="del(${i})">Delete</button>
+</td>
+</tr>
+`;
+
+});
+
+}
+
+/* ===== EDIT ===== */
+function edit(i){
+let v=prompt("Update quantity",products[i].qty);
+if(v!==null){
+products[i].qty=v;
+save();
+}
+}
+
+/* ===== DELETE ===== */
+function del(i){
+products.splice(i,1);
+save();
+}
+
+/* ===== MENU ===== */
+function show(id){
+
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+
+}
+
+/* ===== LOGOUT ===== */
+function logout(){
+localStorage.clear();
+location="login.html";
+}
+
+/* INIT */
+render();
+stats();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Inventory Dashboard</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+min-height:100vh;
+background:
+linear-gradient(rgba(10,15,30,0.85),rgba(20,40,90,0.85)),
+url("https://images.unsplash.com/photo-1557683316-973673baf926") center/cover no-repeat;
+color:white;
+}
+
+/* NAVBAR */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 25px;
+background:rgba(0,0,0,0.5);
+backdrop-filter:blur(10px);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.logo{
+font-size:20px;
+font-weight:bold;
+letter-spacing:1px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin:0 10px;
+padding:8px 12px;
+border-radius:8px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:white;
+color:black;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:40px 20px;
+animation:fadeIn 1s ease;
+}
+
+.hero h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.hero p{
+opacity:0.9;
+}
+
+/* DASHBOARD GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:30px;
+}
+
+/* CARD */
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:20px;
+border-radius:12px;
+text-align:center;
+transition:0.3s;
+cursor:pointer;
+animation:floatUp 0.8s ease;
+}
+
+.card:hover{
+transform:translateY(-8px) scale(1.03);
+background:rgba(255,255,255,0.2);
+}
+
+/* ICON */
+.icon{
+font-size:35px;
+margin-bottom:10px;
+}
+
+/* BUTTON */
+.btn{
+display:inline-block;
+margin-top:10px;
+padding:10px 15px;
+background:white;
+color:black;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.btn:hover{
+background:#22c55e;
+color:white;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(-20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes floatUp{
+from{opacity:0; transform:translateY(30px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:15px;
+background:rgba(0,0,0,0.4);
+margin-top:30px;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+.hero h1{font-size:28px;}
+nav{flex-direction:column;}
+nav div{margin-top:10px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+<div class="logo">📦 Inventory System</div>
+
+<div>
+<a href="index.html">Inventory</a>
+<a href="contact.html">Contact</a>
+<a href="feedback.html">Feedback</a>
+<a href="admin-dashboard.html">Admin Dashboard</a>
+<a href="user-dashboard.html">User Dashboard</a>
+<a href="#" onclick="logout()">Logout</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+<h1>Welcome to Dashboard</h1>
+<p>Manage your inventory system efficiently and smartly</p>
+</div>
+
+<!-- GRID CARDS -->
+<div class="grid">
+
+<div class="card">
+<div class="icon">📦</div>
+<h3>Inventory</h3>
+<p>Manage stock items</p>
+<a class="btn" href="inventory.html">Open</a>
+</div>
+
+<div class="card">
+<div class="icon">📊</div>
+<h3>Reports</h3>
+<p>View analytics</p>
+<a class="btn" href="#">View</a>
+</div>
+
+<div class="card">
+<div class="icon">💬</div>
+<h3>Feedback</h3>
+<p>User feedback system</p>
+<a class="btn" href="feedback.html">Open</a>
+</div>
+
+<div class="card">
+<div class="icon">⚙</div>
+<h3>Settings</h3>
+<p>Customize system</p>
+<a class="btn" href="settings.html">Open</a>
+</div>
+
+<div class="card">
+<div class="icon">📞</div>
+<h3>Contact</h3>
+<p>Support & queries</p>
+<a class="btn" href="contact.html">Open</a>
+</div>
+
+<div class="card">
+<div class="icon">📜</div>
+<h3>History</h3>
+<p>Track activities</p>
+<a class="btn" href="history.html">Open</a>
+</div>
+
+</div>
+
+<footer>
+© 2026 Inventory Management System | Professional Dashboard
+</footer>
+
+<script>
+
+// SESSION CHECK
+if(localStorage.getItem("session")!=="active"){
+window.location="login.html";
+}
+
+// LOGOUT
+function logout(){
+localStorage.removeItem("session");
+window.location="login.html";
+}
+
+</script>
+
+</body>
+</html>

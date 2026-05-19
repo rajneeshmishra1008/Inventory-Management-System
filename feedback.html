@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professional Feedback Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+/* BODY */
+body{
+
+min-height:100vh;
+
+background:
+linear-gradient(rgba(2,6,23,0.92),rgba(15,23,42,0.95)),
+url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d");
+
+background-size:cover;
+background-position:center;
+
+color:white;
+overflow-x:hidden;
+
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{
+width:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+background:#3b82f6;
+border-radius:20px;
+}
+
+/* HEADER */
+header{
+
+text-align:center;
+
+padding:35px 20px;
+
+animation:fadeIn 1s ease;
+
+}
+
+header h1{
+
+font-size:42px;
+font-weight:700;
+
+background:linear-gradient(45deg,#38bdf8,#818cf8);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+header p{
+
+margin-top:10px;
+opacity:0.8;
+font-size:15px;
+
+}
+
+/* STATS */
+.stats{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+padding:20px;
+
+max-width:1200px;
+margin:auto;
+
+}
+
+.stat{
+
+background:rgba(255,255,255,0.08);
+
+padding:25px;
+
+border-radius:20px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.08);
+
+text-align:center;
+
+transition:0.3s;
+
+}
+
+.stat:hover{
+
+transform:translateY(-6px);
+
+background:rgba(255,255,255,0.12);
+
+}
+
+.stat h3{
+
+font-size:36px;
+margin-bottom:10px;
+
+}
+
+/* SEARCH */
+.search-box{
+
+max-width:550px;
+margin:20px auto;
+
+padding:0 15px;
+
+}
+
+.search{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+background:rgba(255,255,255,0.1);
+
+color:white;
+
+font-size:15px;
+
+backdrop-filter:blur(10px);
+
+}
+
+.search::placeholder{
+color:#d1d5db;
+}
+
+/* MAIN */
+.main{
+
+display:grid;
+
+grid-template-columns:350px 1fr;
+
+gap:25px;
+
+padding:20px;
+
+max-width:1400px;
+margin:auto;
+
+}
+
+/* FORM */
+.box{
+
+background:rgba(255,255,255,0.08);
+
+padding:25px;
+
+border-radius:24px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.08);
+
+height:fit-content;
+
+animation:fadeUp 1s ease;
+
+}
+
+.box h2{
+
+margin-bottom:18px;
+font-size:24px;
+
+}
+
+.input-group{
+
+margin-bottom:15px;
+
+}
+
+input,
+textarea,
+select{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+background:rgba(255,255,255,0.1);
+
+color:white;
+
+font-size:14px;
+
+transition:0.3s;
+
+}
+
+input::placeholder,
+textarea::placeholder{
+color:#d1d5db;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+select option{
+color:black;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+background:rgba(255,255,255,0.18);
+
+transform:scale(1.02);
+
+}
+
+/* STARS */
+.stars{
+
+display:flex;
+justify-content:center;
+
+gap:10px;
+
+margin:18px 0;
+
+}
+
+.star{
+
+font-size:32px;
+
+cursor:pointer;
+
+color:#6b7280;
+
+transition:0.3s;
+
+}
+
+.star:hover{
+
+transform:scale(1.2);
+
+}
+
+.activeStar{
+
+color:#fbbf24;
+
+}
+
+/* BUTTON */
+button{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:14px;
+
+background:
+linear-gradient(45deg,#06b6d4,#3b82f6);
+
+color:white;
+
+font-size:15px;
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 10px 20px rgba(59,130,246,0.3);
+
+}
+
+/* LIST */
+.list{
+
+animation:fadeUp 1s ease;
+
+}
+
+/* CARD */
+.card{
+
+position:relative;
+
+display:flex;
+
+gap:15px;
+
+background:rgba(255,255,255,0.08);
+
+padding:20px;
+
+margin-bottom:18px;
+
+border-radius:22px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:0.3s;
+
+overflow:hidden;
+
+}
+
+.card::before{
+
+content:"";
+
+position:absolute;
+
+width:200px;
+height:200px;
+
+background:rgba(59,130,246,0.08);
+
+border-radius:50%;
+
+top:-80px;
+right:-80px;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+background:rgba(255,255,255,0.12);
+
+}
+
+/* AVATAR */
+.avatar{
+
+width:60px;
+height:60px;
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:22px;
+font-weight:700;
+
+background:
+linear-gradient(45deg,#3b82f6,#06b6d4);
+
+color:white;
+
+flex-shrink:0;
+
+}
+
+/* INFO */
+.info{
+flex:1;
+}
+
+.top{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+}
+
+.name{
+
+font-size:18px;
+font-weight:600;
+
+}
+
+/* BADGES */
+.badge{
+
+display:inline-block;
+
+padding:6px 12px;
+
+border-radius:30px;
+
+font-size:12px;
+font-weight:600;
+
+margin-right:6px;
+margin-top:8px;
+
+}
+
+.category{
+background:rgba(59,130,246,0.2);
+color:#93c5fd;
+}
+
+.rating{
+background:rgba(251,191,36,0.2);
+color:#fde68a;
+}
+
+.user{
+background:rgba(34,197,94,0.2);
+color:#86efac;
+}
+
+.demo{
+background:rgba(168,85,247,0.2);
+color:#d8b4fe;
+}
+
+/* MESSAGE */
+.message{
+
+margin-top:10px;
+
+line-height:1.7;
+
+opacity:0.92;
+
+}
+
+/* TIME */
+.time{
+
+margin-top:10px;
+
+font-size:13px;
+
+opacity:0.7;
+
+}
+
+/* DELETE */
+.delete{
+
+position:absolute;
+
+top:15px;
+right:15px;
+
+width:auto;
+
+padding:8px 12px;
+
+border:none;
+
+border-radius:10px;
+
+background:
+linear-gradient(45deg,#ef4444,#dc2626);
+
+font-size:12px;
+
+}
+
+/* EMPTY */
+.empty{
+
+text-align:center;
+
+padding:80px 20px;
+
+opacity:0.8;
+
+}
+
+.empty img{
+
+width:130px;
+
+margin-bottom:15px;
+
+}
+
+/* FOOTER */
+footer{
+
+text-align:center;
+
+padding:20px;
+
+margin-top:30px;
+
+background:rgba(0,0,0,0.25);
+
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(-20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+.main{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+header h1{
+font-size:30px;
+}
+
+.card{
+flex-direction:column;
+}
+
+.top{
+flex-direction:column;
+align-items:flex-start;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+
+<h1>⭐ Feedback Analytics Dashboard</h1>
+
+<p>
+Professional Feedback & Review Management System
+</p>
+
+</header>
+
+<!-- STATS -->
+<div class="stats">
+
+<div class="stat">
+
+<h3 id="total">
+0
+</h3>
+
+<p>Total Feedback</p>
+
+</div>
+
+<div class="stat">
+
+<h3 id="avg">
+0
+</h3>
+
+<p>Average Rating</p>
+
+</div>
+
+<div class="stat">
+
+<h3 id="cat">
+0
+</h3>
+
+<p>Total Categories</p>
+
+</div>
+
+<div class="stat">
+
+<h3 id="fiveStar">
+0
+</h3>
+
+<p>5 Star Reviews</p>
+
+</div>
+
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+
+<input
+class="search"
+id="search"
+onkeyup="render()"
+placeholder="🔍 Search feedback..."
+>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- FORM -->
+<div class="box">
+
+<h2>📝 Submit Feedback</h2>
+
+<div class="input-group">
+
+<input
+id="name"
+placeholder="Enter Your Name"
+>
+
+</div>
+
+<div class="input-group">
+
+<select id="category">
+
+<option>General</option>
+<option>Inventory</option>
+<option>Login</option>
+<option>Support</option>
+<option>UI/UX</option>
+<option>Performance</option>
+
+</select>
+
+</div>
+
+<div class="input-group">
+
+<textarea
+id="msg"
+placeholder="Write your feedback..."
+></textarea>
+
+</div>
+
+<!-- STARS -->
+<div class="stars">
+
+<span class="star" onclick="rate(1)">★</span>
+<span class="star" onclick="rate(2)">★</span>
+<span class="star" onclick="rate(3)">★</span>
+<span class="star" onclick="rate(4)">★</span>
+<span class="star" onclick="rate(5)">★</span>
+
+</div>
+
+<button onclick="submitFeedback()">
+
+🚀 Submit Feedback
+
+</button>
+
+</div>
+
+<!-- LIST -->
+<div class="list">
+
+<div id="list"></div>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+
+© 2026 Professional Feedback Management System
+
+</footer>
+
+<script>
+
+/* FEEDBACK DATA */
+let feedbacks = JSON.parse(
+localStorage.getItem("feedbacks")
+|| "null"
+) || [
+
+{
+name:"Admin System",
+msg:"Welcome to the Professional Feedback Dashboard.",
+category:"General",
+rating:5,
+time:"2026-01-01 10:00",
+type:"demo"
+},
+
+{
+name:"Ravi Sharma",
+msg:"Inventory dashboard looks modern and very easy to use.",
+category:"Inventory",
+rating:4,
+time:"2026-01-02 12:30",
+type:"demo"
+},
+
+{
+name:"Support Team",
+msg:"Use search to quickly find user feedback records.",
+category:"Support",
+rating:5,
+time:"2026-01-03 09:15",
+type:"demo"
+}
+
+];
+
+let rating = 0;
+
+/* STAR */
+function rate(n){
+
+rating = n;
+
+document.querySelectorAll(".star")
+.forEach((s,i)=>{
+
+s.classList.toggle(
+"activeStar",
+i < n
+);
+
+});
+
+}
+
+/* SAVE */
+function save(){
+
+localStorage.setItem(
+"feedbacks",
+JSON.stringify(feedbacks)
+);
+
+}
+
+/* SUBMIT */
+function submitFeedback(){
+
+let name =
+document.getElementById("name")
+.value.trim();
+
+let msg =
+document.getElementById("msg")
+.value.trim();
+
+let category =
+document.getElementById("category")
+.value;
+
+if(
+!name ||
+!msg ||
+rating===0
+){
+
+alert(
+"Please fill all fields & rating"
+);
+
+return;
+
+}
+
+feedbacks.push({
+
+name:name,
+msg:msg,
+category:category,
+rating:rating,
+time:new Date().toLocaleString(),
+type:"user"
+
+});
+
+save();
+
+/* RESET */
+document.getElementById("name").value="";
+document.getElementById("msg").value="";
+
+rating = 0;
+
+document.querySelectorAll(".star")
+.forEach(s=>{
+
+s.classList.remove("activeStar");
+
+});
+
+render();
+
+}
+
+/* DELETE */
+function del(i){
+
+if(confirm(
+"Delete this feedback?"
+)){
+
+feedbacks.splice(i,1);
+
+save();
+
+render();
+
+}
+
+}
+
+/* STATS */
+function updateStats(){
+
+document.getElementById("total")
+.innerText =
+feedbacks.length;
+
+let avg = feedbacks.length
+
+? (
+feedbacks.reduce(
+(a,b)=>a+b.rating,0
+)
+/
+feedbacks.length
+).toFixed(1)
+
+: 0;
+
+document.getElementById("avg")
+.innerText = avg;
+
+let cats = new Set(
+feedbacks.map(f=>f.category)
+);
+
+document.getElementById("cat")
+.innerText = cats.size;
+
+document.getElementById("fiveStar")
+.innerText =
+feedbacks.filter(
+f=>f.rating===5
+).length;
+
+}
+
+/* RENDER */
+function render(){
+
+updateStats();
+
+let val =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+let filtered =
+feedbacks.filter(f =>
+
+f.name.toLowerCase().includes(val)
+||
+f.msg.toLowerCase().includes(val)
+||
+f.category.toLowerCase().includes(val)
+
+);
+
+let box =
+document.getElementById("list");
+
+if(filtered.length===0){
+
+box.innerHTML = `
+
+<div class="empty">
+
+<img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png">
+
+<h2>No Feedback Found</h2>
+
+<p>
+No matching records available
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+box.innerHTML = filtered
+.slice()
+.reverse()
+.map((f,i)=>{
+
+let badgeClass =
+f.type==="demo"
+? "demo"
+: "user";
+
+let badgeText =
+f.type==="demo"
+? "Tutorial"
+: "User";
+
+return `
+
+<div class="card">
+
+<button
+class="delete"
+onclick="del(${i})"
+>
+
+Delete
+
+</button>
+
+<div class="avatar">
+
+${f.name[0].toUpperCase()}
+
+</div>
+
+<div class="info">
+
+<div class="top">
+
+<div class="name">
+${f.name}
+</div>
+
+</div>
+
+<div class="message">
+
+${f.msg}
+
+</div>
+
+<div>
+
+<span class="badge ${badgeClass}">
+${badgeText}
+</span>
+
+<span class="badge category">
+${f.category}
+</span>
+
+<span class="badge rating">
+⭐ ${f.rating}
+</span>
+
+</div>
+
+<div class="time">
+
+🕒 ${f.time}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+/* INITIAL */
+render();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Professional Inventory Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:
+linear-gradient(rgba(2,6,23,0.88),rgba(15,23,42,0.92)),
+url("https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc");
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+color:white;
+min-height:100vh;
+}
+
+/* NAVBAR */
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+position:sticky;
+top:0;
+z-index:100;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+nav h2{font-size:22px;}
+
+nav button{
+padding:8px 14px;
+border:none;
+border-radius:10px;
+background:rgba(255,255,255,0.15);
+color:white;
+cursor:pointer;
+margin-right:10px;
+transition:0.3s;
+}
+nav button:hover{background:#60a5fa;}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:60px 20px 20px;
+}
+
+.hero h1{
+font-size:46px;
+font-weight:700;
+background:linear-gradient(45deg,#38bdf8,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{opacity:0.8;margin-top:8px;}
+
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+padding:20px;
+max-width:1100px;
+margin:auto;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+padding:20px;
+border-radius:18px;
+text-align:center;
+transition:0.3s;
+}
+
+.card:hover{transform:translateY(-6px);}
+
+.card h3{opacity:0.8;font-size:14px;}
+.card h2{font-size:28px;margin-top:10px;}
+
+/* SEARCH */
+.search{
+max-width:600px;
+margin:20px auto;
+padding:0 20px;
+}
+
+.search input{
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+outline:none;
+background:rgba(255,255,255,0.1);
+color:white;
+}
+
+/* FORM */
+.form-box{
+max-width:1100px;
+margin:20px auto;
+padding:20px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border-radius:20px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:12px;
+}
+
+input{
+padding:12px;
+border:none;
+border-radius:10px;
+background:rgba(255,255,255,0.12);
+color:white;
+outline:none;
+transition:0.3s;
+}
+
+input:focus{transform:scale(1.03);}
+
+.add-btn{
+margin-top:12px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#22c55e,#16a34a);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* TABLE */
+.table-box{
+max-width:1100px;
+margin:20px auto;
+padding:20px;
+background:rgba(255,255,255,0.08);
+border-radius:20px;
+backdrop-filter:blur(15px);
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:800px;
+}
+
+th,td{
+padding:14px;
+text-align:center;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+th{background:rgba(255,255,255,0.1);}
+
+tr:hover{background:rgba(255,255,255,0.05);}
+
+/* STATUS */
+.instock{color:#22c55e;font-weight:600;}
+.lowstock{color:#facc15;font-weight:600;}
+.outstock{color:#ef4444;font-weight:600;}
+
+/* BUTTONS */
+.btn{
+padding:6px 10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:2px;
+font-weight:600;
+}
+
+.plus{background:#22c55e;color:white;}
+.minus{background:#ef4444;color:white;}
+.delete{background:#111827;color:white;}
+
+footer{
+text-align:center;
+padding:20px;
+opacity:0.7;
+}
+
+nav div{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+/* LINKS */
+nav a{
+color:white;
+text-decoration:none;
+padding:8px 14px;
+border-radius:10px;
+background:rgba(255,255,255,0.08);
+transition:0.3s;
+font-weight:500;
+}
+
+nav a:hover{
+background:#3b82f6;
+color:white;
+transform:translateY(-2px);
+}
+
+/* ADMIN BUTTON */
+#adminNameBtn{
+padding:8px 14px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#06b6d4,#3b82f6);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+#adminNameBtn:hover{
+transform:scale(1.05);
+box-shadow:0 5px 15px rgba(59,130,246,0.4);
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h2>📦 Inventory Pro</h2>
+
+<div>
+<button id="adminNameBtn" onclick="openAdminDashboard()">
+👤 <span id="adminName">Admin</span>
+</button>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="contact.html">Contact</a>
+<a href="feedback.html">Feedback</a>
+<a href="help.html">Help</a>
+<a href="settings.html">Settings</a>
+<a href="login.html">Login</a>
+<a href="signup.html">Sign Up</a>
+</div>
+</nav>
+
+<div class="hero">
+<h1>Smart Inventory System</h1>
+<p>Modern stock management dashboard</p>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+<div class="card"><h3>Total Products</h3><h2 id="total">0</h2></div>
+<div class="card"><h3>Low Stock</h3><h2 id="low">0</h2></div>
+<div class="card"><h3>Out of Stock</h3><h2 id="out">0</h2></div>
+</div>
+
+<!-- SEARCH -->
+<div class="search">
+<input id="search" placeholder="Search product..." onkeyup="render()">
+</div>
+
+<!-- FORM -->
+<div class="form-box">
+<div class="form-grid">
+<input id="id" placeholder="ID">
+<input id="name" placeholder="Name">
+<input id="cat" placeholder="Category">
+<input id="price" placeholder="Price">
+<input id="stock" placeholder="Stock">
+</div>
+<button class="add-btn" onclick="addProduct()">Add Product</button>
+</div>
+
+<!-- TABLE -->
+<div class="table-box">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Category</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
+</div>
+
+<footer>© 2026 Inventory Pro</footer>
+
+<script>
+
+function openAdminDashboard(){
+let role = localStorage.getItem("role");
+if(role==="admin"){
+window.location="admin-dashboard.html";
+}else{
+alert("Admin only access");
+}
+}
+
+/* ✅ LOAD ADMIN NAME */
+function loadAdminName(){
+let name = localStorage.getItem("username");
+document.getElementById("adminName").innerText = name ? name : "Admin";
+}
+
+loadAdminName();
+
+/* PRODUCTS */
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function save(){
+localStorage.setItem("products",JSON.stringify(products));
+}
+
+function render(){
+
+let table = document.getElementById("table");
+table.innerHTML="";
+
+let search = document.getElementById("search").value.toLowerCase();
+
+let low=0,out=0;
+
+products.forEach((p,i)=>{
+
+if(!p.name.toLowerCase().includes(search)) return;
+
+let status="",cls="";
+
+if(p.stock==0){status="Out";cls="outstock";out++;}
+else if(p.stock<=5){status="Low";cls="lowstock";low++;}
+else status="In",cls="instock";
+
+table.innerHTML+=`
+<tr>
+<td>${p.id}</td>
+<td>${p.name}</td>
+<td>${p.category}</td>
+<td>₹${p.price}</td>
+<td>${p.stock}</td>
+<td class="${cls}">${status}</td>
+<td>
+<button class="btn plus" onclick="inc(${i})">+</button>
+<button class="btn minus" onclick="dec(${i})">-</button>
+<button class="btn delete" onclick="del(${i})">X</button>
+</td>
+</tr>`;
+});
+
+document.getElementById("total").innerText = products.length;
+document.getElementById("low").innerText = low;
+document.getElementById("out").innerText = out;
+
+save();
+}
+
+function addProduct(){
+products.push({
+id:document.getElementById("id").value,
+name:document.getElementById("name").value,
+category:document.getElementById("cat").value,
+price:document.getElementById("price").value,
+stock:Number(document.getElementById("stock").value)
+});
+render();
+}
+
+function inc(i){products[i].stock++;render();}
+function dec(i){if(products[i].stock>0)products[i].stock--;render();}
+function del(i){products.splice(i,1);render();}
+
+render();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Advanced Activity History Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+/* BODY */
+body{
+
+min-height:100vh;
+
+background:
+linear-gradient(rgba(15,23,42,0.92),rgba(30,41,59,0.95)),
+url("https://images.unsplash.com/photo-1553413077-190dd305871c");
+
+background-size:cover;
+background-position:center;
+
+color:white;
+overflow-x:hidden;
+
+}
+
+/* NAVBAR */
+nav{
+
+position:sticky;
+top:0;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:15px 25px;
+
+background:rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+border-bottom:1px solid rgba(255,255,255,0.1);
+
+z-index:100;
+
+}
+
+.logo{
+
+font-size:24px;
+font-weight:700;
+
+}
+
+nav a{
+
+color:white;
+text-decoration:none;
+
+margin:0 5px;
+padding:8px 14px;
+
+border-radius:8px;
+
+transition:0.3s;
+
+}
+
+nav a:hover{
+
+background:rgba(255,255,255,0.2);
+
+}
+
+/* HEADER */
+header{
+
+text-align:center;
+
+padding:40px 20px;
+
+animation:fadeIn 1s ease;
+
+}
+
+header h1{
+
+font-size:40px;
+font-weight:700;
+
+}
+
+header p{
+
+margin-top:10px;
+opacity:0.8;
+
+}
+
+/* CONTROLS */
+.controls{
+
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+
+gap:15px;
+
+padding:20px;
+
+}
+
+/* INPUT */
+.controls input,
+.controls select{
+
+padding:12px;
+
+border:none;
+outline:none;
+
+border-radius:10px;
+
+background:rgba(255,255,255,0.15);
+
+color:white;
+
+min-width:220px;
+
+backdrop-filter:blur(10px);
+
+}
+
+.controls select option{
+color:black;
+}
+
+/* BUTTONS */
+button{
+
+padding:12px 18px;
+
+border:none;
+border-radius:10px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-3px);
+
+}
+
+.clear{
+background:#ef4444;
+color:white;
+}
+
+.export{
+background:#22c55e;
+color:white;
+}
+
+/* STATS */
+.stats{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+padding:20px;
+
+max-width:1200px;
+margin:auto;
+
+}
+
+.stat-card{
+
+background:rgba(255,255,255,0.1);
+
+padding:25px;
+
+border-radius:20px;
+
+backdrop-filter:blur(15px);
+
+text-align:center;
+
+transition:0.3s;
+
+border:1px solid rgba(255,255,255,0.1);
+
+}
+
+.stat-card:hover{
+
+transform:translateY(-5px) scale(1.02);
+
+}
+
+/* HISTORY */
+.container{
+
+max-width:1100px;
+
+margin:auto;
+
+padding:20px;
+
+}
+
+/* CARD */
+.card{
+
+display:flex;
+align-items:center;
+gap:18px;
+
+background:rgba(255,255,255,0.1);
+
+padding:18px;
+
+margin-bottom:18px;
+
+border-radius:18px;
+
+backdrop-filter:blur(15px);
+
+border:1px solid rgba(255,255,255,0.1);
+
+transition:0.3s;
+
+animation:fadeUp 0.5s ease;
+
+position:relative;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+background:rgba(255,255,255,0.15);
+
+}
+
+/* IMAGE */
+.card img{
+
+width:70px;
+height:70px;
+
+border-radius:16px;
+
+object-fit:cover;
+
+border:3px solid rgba(255,255,255,0.8);
+
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+
+}
+
+/* INFO */
+.info{
+flex:1;
+}
+
+.title{
+
+font-size:18px;
+font-weight:600;
+
+}
+
+.time{
+
+font-size:13px;
+opacity:0.7;
+
+margin-top:5px;
+
+}
+
+.detail{
+
+margin-top:8px;
+font-size:14px;
+opacity:0.9;
+
+line-height:1.5;
+
+}
+
+/* BADGES */
+.badge{
+
+padding:8px 14px;
+
+border-radius:10px;
+
+font-size:12px;
+font-weight:700;
+
+}
+
+.login{
+background:#3b82f6;
+}
+
+.signup{
+background:#22c55e;
+}
+
+.stock{
+background:#f59e0b;
+}
+
+/* EMPTY */
+.empty{
+
+text-align:center;
+
+padding:80px 20px;
+
+opacity:0.8;
+
+}
+
+.empty img{
+
+width:120px;
+
+margin-bottom:15px;
+
+}
+
+/* FOOTER */
+footer{
+
+text-align:center;
+
+padding:20px;
+
+background:rgba(0,0,0,0.4);
+
+margin-top:30px;
+
+}
+
+/* LIVE STATUS */
+.live{
+
+position:fixed;
+
+bottom:20px;
+right:20px;
+
+background:#22c55e;
+
+padding:12px 18px;
+
+border-radius:30px;
+
+font-size:14px;
+font-weight:600;
+
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+animation:pulse 1.5s infinite;
+
+cursor:pointer;
+
+user-select:none;
+
+transition:0.3s;
+
+}
+
+.live:hover{
+
+transform:scale(1.05);
+
+}
+
+/* USER IMAGE */
+.user-image{
+
+width:55px;
+height:55px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:2px solid white;
+
+}
+
+/* ANIMATIONS */
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.05);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(-20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+
+header h1{
+font-size:30px;
+}
+
+nav{
+flex-direction:column;
+gap:10px;
+}
+
+.controls{
+flex-direction:column;
+align-items:center;
+}
+
+.controls input,
+.controls select{
+width:100%;
+max-width:320px;
+}
+
+.card{
+flex-direction:column;
+text-align:center;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+
+<div class="logo">
+📜 Activity Logger
+</div>
+
+<div>
+
+<a href="index.html">Home</a>
+<a href="dashboard.html">Dashboard</a>
+<a href="inventory.html">Inventory</a>
+<a href="contact.html">Contact</a>
+<a href="settings.html">Settings</a>
+
+</div>
+
+</nav>
+
+<!-- HEADER -->
+<header>
+
+<h1>Advanced Activity Dashboard</h1>
+
+<p>
+Track User Login, Signup & Inventory Activities
+</p>
+
+</header>
+
+<!-- CONTROLS -->
+<div class="controls">
+
+<input
+type="text"
+id="search"
+placeholder="Search history..."
+onkeyup="render()"
+>
+
+<select id="filter" onchange="render()">
+
+<option value="all">
+All Activities
+</option>
+
+<option value="login">
+Login Details
+</option>
+
+<option value="signup">
+Signup Details
+</option>
+
+<option value="stock">
+Inventory Details
+</option>
+
+</select>
+
+<button class="clear" onclick="clearHistory()">
+🗑 Clear
+</button>
+
+<button class="export" onclick="exportHistory()">
+📥 Export
+</button>
+
+</div>
+
+<!-- STATS -->
+<div class="stats">
+
+<div class="stat-card">
+
+<h2 id="totalLogs">0</h2>
+
+<p>Total Activities</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="loginCount">0</h2>
+
+<p>Total Logins</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="signupCount">0</h2>
+
+<p>Total Signups</p>
+
+</div>
+
+<div class="stat-card">
+
+<h2 id="stockCount">0</h2>
+
+<p>Inventory Updates</p>
+
+</div>
+
+</div>
+
+<!-- HISTORY -->
+<div class="container">
+
+<div id="history"></div>
+
+</div>
+
+<!-- LIVE STATUS -->
+<div class="live" id="liveStatus">
+🟢 Real-Time Monitoring Active
+</div>
+
+<!-- FOOTER -->
+<footer>
+
+© 2026 Professional Inventory Management System
+
+</footer>
+
+<script>
+
+/* =========================
+   GET LOGS
+========================= */
+
+function getLogs(){
+
+return JSON.parse(
+localStorage.getItem("logs")
+) || [];
+
+}
+
+/* =========================
+   LOAD LOGS
+========================= */
+
+let logs = getLogs();
+
+/* =========================
+   UPDATE STATS
+========================= */
+
+function updateStats(){
+
+document.getElementById("totalLogs").innerText =
+logs.length;
+
+document.getElementById("loginCount").innerText =
+logs.filter(l=>l.type==="login").length;
+
+document.getElementById("signupCount").innerText =
+logs.filter(l=>l.type==="signup").length;
+
+document.getElementById("stockCount").innerText =
+logs.filter(l=>l.type==="stock").length;
+
+}
+
+/* =========================
+   RENDER HISTORY
+========================= */
+
+function render(){
+
+logs = getLogs();
+
+let search =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+let filter =
+document.getElementById("filter")
+.value;
+
+let filtered = logs.filter(l=>{
+
+return (
+
+(filter==="all" || l.type===filter)
+
+&&
+
+l.title.toLowerCase().includes(search)
+
+);
+
+});
+
+/* EMPTY */
+if(filtered.length===0){
+
+document.getElementById("history").innerHTML = `
+
+<div class="empty">
+
+<img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png">
+
+<h2>No Activity Found</h2>
+
+<p>No matching history available</p>
+
+</div>
+
+`;
+
+updateStats();
+
+return;
+
+}
+
+/* SHOW HISTORY */
+document.getElementById("history").innerHTML =
+
+filtered
+.slice()
+.reverse()
+.map(l=>{
+
+let img =
+"https://cdn-icons-png.flaticon.com/512/565/565547.png";
+
+let detail =
+"System Activity";
+
+let userImage =
+l.image ||
+"https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
+if(l.type==="login"){
+
+img =
+"https://cdn-icons-png.flaticon.com/512/1828/1828395.png";
+
+detail =
+"User accessed the system successfully.";
+
+}
+
+if(l.type==="signup"){
+
+img =
+"https://cdn-icons-png.flaticon.com/512/1828/1828490.png";
+
+detail =
+"New account registered into the system.";
+
+}
+
+if(l.type==="stock"){
+
+img =
+"https://cdn-icons-png.flaticon.com/512/679/679720.png";
+
+detail =
+"Inventory stock updated successfully.";
+
+}
+
+return `
+
+<div class="card">
+
+<img class="user-image" src="${userImage}">
+
+<div class="info">
+
+<div class="title">
+
+${l.title}
+
+</div>
+
+<div class="time">
+
+🕒 ${l.time}
+
+</div>
+
+<div class="detail">
+
+${detail}
+
+</div>
+
+</div>
+
+<div class="badge ${l.type}">
+
+${l.type.toUpperCase()}
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+updateStats();
+
+}
+
+/* =========================
+   REALTIME MONITORING
+========================= */
+
+let realtime = true;
+
+const liveStatus =
+document.getElementById("liveStatus");
+
+/* STORAGE LISTENER */
+window.addEventListener(
+"storage",
+function(){
+
+if(realtime){
+render();
+}
+
+}
+);
+
+/* AUTO REFRESH */
+let monitor = setInterval(()=>{
+
+if(realtime){
+render();
+}
+
+},1000);
+
+/* TOGGLE MONITORING */
+liveStatus.onclick = function(){
+
+realtime = !realtime;
+
+if(realtime){
+
+liveStatus.innerHTML =
+"🟢 Real-Time Monitoring Active";
+
+liveStatus.style.background =
+"#22c55e";
+
+render();
+
+}else{
+
+liveStatus.innerHTML =
+"🔴 Real-Time Monitoring Stopped";
+
+liveStatus.style.background =
+"#ef4444";
+
+}
+
+};
+
+/* =========================
+   CLEAR HISTORY
+========================= */
+
+function clearHistory(){
+
+if(confirm(
+"Delete all activity history permanently?"
+)){
+
+localStorage.removeItem("logs");
+
+logs=[];
+
+render();
+
+}
+
+}
+
+/* =========================
+   EXPORT HISTORY
+========================= */
+
+function exportHistory(){
+
+let text = logs.map(l =>
+
+`${l.type.toUpperCase()}
+- ${l.title}
+- ${l.time}
+
+`).join("\n");
+
+let blob = new Blob(
+[text],
+{type:"text/plain"}
+);
+
+let a =
+document.createElement("a");
+
+a.href =
+URL.createObjectURL(blob);
+
+a.download =
+"activity-history.txt";
+
+a.click();
+
+}
+
+/* =========================
+   DEMO DATA
+========================= */
+
+if(logs.length===0){
+
+logs.push({
+
+id:1,
+type:"signup",
+title:"New User Signup: Rajneesh",
+time:new Date().toLocaleString(),
+image:"https://randomuser.me/api/portraits/men/32.jpg"
+
+});
+
+logs.push({
+
+id:2,
+type:"login",
+title:"User Login: Rajneesh",
+time:new Date().toLocaleString(),
+image:"https://randomuser.me/api/portraits/men/32.jpg"
+
+});
+
+logs.push({
+
+id:3,
+type:"stock",
+title:"Added Inventory Item: Laptop (5)",
+time:new Date().toLocaleString(),
+image:"https://cdn-icons-png.flaticon.com/512/679/679720.png"
+
+});
+
+localStorage.setItem(
+"logs",
+JSON.stringify(logs)
+);
+
+}
+
+/* =========================
+   INITIAL RENDER
+========================= */
+
+render();
+
+</script>
+
+</body>
+
+</html>

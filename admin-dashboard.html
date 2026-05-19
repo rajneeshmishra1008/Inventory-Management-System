@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Admin Pro+</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+display:flex;
+min-height:100vh;
+background:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+url("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d");
+background-size:cover;
+background-position:center;
+color:white;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:270px;
+padding:20px;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(18px);
+border-right:1px solid rgba(255,255,255,0.1);
+}
+
+.logoBox{
+text-align:center;
+margin-bottom:15px;
+}
+
+.logoBox img{
+width:75px;
+height:75px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid rgba(255,255,255,0.3);
+}
+
+.sidebar h3{
+margin-top:8px;
+}
+
+.sidebar a{
+display:block;
+padding:10px;
+margin:6px 0;
+text-decoration:none;
+color:white;
+border-radius:8px;
+transition:0.3s;
+}
+
+.sidebar a:hover{
+background:linear-gradient(45deg,#3b82f6,#8b5cf6);
+}
+
+/* MAIN */
+.main{
+flex:1;
+padding:20px;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.logout{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+background:linear-gradient(45deg,#ef4444,#dc2626);
+color:white;
+cursor:pointer;
+}
+
+/* STATS */
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.06);
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+/* FORM */
+.form{
+background:rgba(255,255,255,0.06);
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:6px 0;
+border:none;
+border-radius:8px;
+background:rgba(255,255,255,0.1);
+color:white;
+outline:none;
+}
+
+/* BUTTON */
+button{
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:600;
+}
+
+.add{
+width:100%;
+background:linear-gradient(45deg,#22c55e,#16a34a);
+color:white;
+margin-top:10px;
+}
+
+/* PDF BUTTON (BELOW ADMIN PANEL STYLE) */
+.pdfBtn{
+width:100%;
+margin-top:10px;
+background:linear-gradient(45deg,#3b82f6,#2563eb);
+color:white;
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+tr:hover{
+background:rgba(255,255,255,0.05);
+}
+
+/* ACTION BUTTONS */
+.del{
+background:#ef4444;
+color:white;
+padding:6px 10px;
+border-radius:6px;
+}
+
+.edit{
+background:#facc15;
+color:black;
+padding:6px 10px;
+border-radius:6px;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+body{flex-direction:column;}
+.sidebar{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="logoBox">
+<img id="adminImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+<h3 id="adminName">Admin</h3>
+</div>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="index.html">Inventory</a>
+<a href="#">Reports</a>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<h2>Inventory Management System</h2>
+<button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<!-- STATS -->
+<div class="cards">
+<div class="card">Total Products <h2 id="tp">0</h2></div>
+<div class="card">Low Stock <h2 id="ls">0</h2></div>
+<div class="card">Inventory Value <h2 id="val">₹0</h2></div>
+</div>
+
+<!-- FORM -->
+<div class="form">
+<h3>Add Product</h3>
+<input id="name" placeholder="Product Name">
+<input id="price" placeholder="Price">
+<input id="qty" placeholder="Quantity">
+
+<button class="add" onclick="addProduct()">Add Product</button>
+
+<!-- PDF BUTTON BELOW ADMIN PANEL -->
+<button class="pdfBtn" onclick="generatePDF()">Download Inventory Report</button>
+</div>
+
+<!-- TABLE -->
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="table"></tbody>
+</table>
+
+</div>
+
+<script>
+
+let admin = localStorage.getItem("activeUser") || "Admin";
+let adminImage = localStorage.getItem("activeImage") ||
+"https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
+document.getElementById("adminName").innerText = admin;
+document.getElementById("adminImg").src = adminImage;
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+function save(){
+localStorage.setItem("products",JSON.stringify(products));
+}
+
+/* ADD */
+function addProduct(){
+let n=document.getElementById("name").value;
+let p=document.getElementById("price").value;
+let q=document.getElementById("qty").value;
+
+if(!n||!p||!q){
+alert("Fill all fields");
+return;
+}
+
+products.push({
+name:n,
+price:Number(p),
+qty:Number(q)
+});
+
+save();
+render();
+}
+
+/* DELETE */
+function del(i){
+products.splice(i,1);
+save();
+render();
+}
+
+/* EDIT */
+function edit(i){
+let v=prompt("Update quantity:",products[i].qty);
+if(v!==null){
+products[i].qty=Number(v);
+save();
+render();
+}
+}
+
+/* RENDER */
+function render(){
+
+let t=document.getElementById("table");
+t.innerHTML="";
+
+let low=0;
+let value=0;
+
+products.forEach((p,i)=>{
+
+if(p.qty<=5) low++;
+value += p.price * p.qty;
+
+t.innerHTML+=`
+<tr>
+<td>${p.name}</td>
+<td>₹${p.price}</td>
+<td>${p.qty}</td>
+<td>${p.qty>5?"OK":"LOW"}</td>
+<td>
+<button class="edit" onclick="edit(${i})">Edit</button>
+<button class="del" onclick="del(${i})">Delete</button>
+</td>
+</tr>`;
+});
+
+document.getElementById("tp").innerText=products.length;
+document.getElementById("ls").innerText=low;
+document.getElementById("val").innerText="₹"+value;
+}
+
+/* PDF GENERATION */
+function generatePDF(){
+
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+
+doc.setFontSize(16);
+doc.text("INVENTORY MANAGEMENT REPORT",10,10);
+
+doc.setFontSize(12);
+doc.text("Admin: " + admin,10,20);
+doc.text("Date: " + new Date().toLocaleString(),10,30);
+
+let y = 40;
+let total = 0;
+
+products.forEach((p,i)=>{
+total += p.price * p.qty;
+doc.text(`${i+1}. ${p.name} | ₹${p.price} | Qty: ${p.qty}`,10,y);
+y += 8;
+});
+
+doc.text("Total Inventory Value: ₹" + total,10,y+10);
+
+doc.save("inventory_report.pdf");
+}
+
+/* LOGOUT */
+function logout(){
+localStorage.clear();
+window.location="login.html";
+}
+
+render();
+
+</script>
+
+</body>
+</html>
